@@ -1,0 +1,26 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-west-2",
+    "source_ami": "ami-4836a428",
+    "instance_type": "t2.micro",
+    "ssh_username": "ec2-user",
+    "ami_name": "aws-instance-image {{timestamp}}"
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "inline": [
+      "sleep 30",
+      "sudo yum upgrade -y",
+      "sudo yum remove java -y",
+      "sudo yum install java-1.8.0-openjdk.x86_64 -y",
+      "wget https://s3-us-west-2.amazonaws.com/elo7-aws-study-group/aws-study-group-0.0.1-SNAPSHOT.jar"
+    ]
+  }]
+}
